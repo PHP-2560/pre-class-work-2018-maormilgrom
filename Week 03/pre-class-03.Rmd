@@ -13,7 +13,7 @@ We will work with the dataset called [gapminder](https://github.com/jennybc/gapm
 install.packages("gapminder")
 ```
 
-
+Maor!
 
 ```
 library(dplyr)
