@@ -37,15 +37,88 @@ gapminder %>%
 ```{r}
 gapminder %>%
   arrange(gdpPercap) %>%
-  select(country) %>%
+  select(country, gdpPercap) %>%
   head(1)
 ```
 
 3. According to the data available, what was the average life expectancy across each continent in the 1980s?
+```{r}
+gapminder %>%
+  group_by(continent) %>%
+  filter(year>=1980 & year<1990) %>%
+  summarise(avg_life_exp=mean(lifeExp))
+```
+
+
 4. What 5 countries have the highest total GDP over all years combined?
+```{r}
+gapminder %>%
+  mutate(gdp=pop*gdpPercap) %>%
+  group_by(country) %>%
+  summarise(tot_gdp=sum(gdp)) %>%
+  arrange(desc(tot_gdp)) %>%
+  select(country,tot_gdp) %>%
+  head(5)
+```
+
 5. What countries and years had life expectancies of _at least_ 80 years? _N.b. only output the columns of interest: country, life expectancy and year (in that order)._
+
+```{r}
+gapminder %>%
+  filter(lifeExp>=80) %>%
+  select(country,lifeExp,year)
+```
+
 6. What 10 countries have the strongest correlation (in either direction) between life expectancy and per capita GDP?
+```{r}
+gapminder %>%
+  group_by(country) %>%
+  summarize(corr=abs(cor(lifeExp,gdpPercap))) %>%
+  arrange(desc(corr)) %>%
+  select(country, corr) %>%
+  head(10)
+```
+
+
 7. Which combinations of continent (besides Asia) and year have the highest average population across all countries? _N.b. your output should include all results sorted by highest average population_. With what you already know, this one may stump you. See [this Q&A](http://stackoverflow.com/q/27207963/654296) for how to `ungroup` before `arrange`ing. This also [behaves differently in more recent versions of dplyr](https://github.com/hadley/dplyr/releases/tag/v0.5.0).
+
+```{r}
+gapminder %>%
+  filter(continent!="Asia") %>%
+  group_by(year,continent) %>%
+  summarise(avg_pop=mean(pop)) %>%
+  arrange(desc(avg_pop))
+
+```
+
 8. Which three countries have had the most consistent population estimates (i.e. lowest standard deviation) across the years of available data? 
+
+```{r}
+gapminder %>%
+  group_by(country) %>%
+  summarize(sd_pop=sd(pop)) %>%
+  arrange(sd_pop) %>%
+  select(country, sd_pop) %>%
+  head(3)
+```
+
+
 9. Subset **gm** to only include observations from 1992 and store the results as **gm1992**. What kind of object is this?
+```{r}
+gm1992=gapminder %>%
+  filter(year>=1992)
+  typeof(gm1992)
+
+```
+
 10. Which observations indicate that the population of a country has *decreased* from the previous year **and** the life expectancy has *increased* from the previous year? See [the vignette on window functions](https://cran.r-project.org/web/packages/dplyr/vignettes/window-functions.html).
+
+```{r}
+gapminder %>%
+  #I could have used just filter(pop < lag(pop), lifeExp>lag(lifeExp)), but received warning
+  mutate(lag_pop=lag(pop), lag_lifeexp=lag(lifeExp)) %>%
+  filter(pop<lag_pop,lifeExp>lag_lifeexp)
+ ```
+
+
+
