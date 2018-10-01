@@ -9,16 +9,71 @@ Make sure you commit this often with meaningful messages.
 ### Question 1:
 
 Using a loop, print the integers from 1 to 50. 
-```{r}
+
+```r
 for (i in 1:50){
   print(i)
 }
 ```
 
+```
+## [1] 1
+## [1] 2
+## [1] 3
+## [1] 4
+## [1] 5
+## [1] 6
+## [1] 7
+## [1] 8
+## [1] 9
+## [1] 10
+## [1] 11
+## [1] 12
+## [1] 13
+## [1] 14
+## [1] 15
+## [1] 16
+## [1] 17
+## [1] 18
+## [1] 19
+## [1] 20
+## [1] 21
+## [1] 22
+## [1] 23
+## [1] 24
+## [1] 25
+## [1] 26
+## [1] 27
+## [1] 28
+## [1] 29
+## [1] 30
+## [1] 31
+## [1] 32
+## [1] 33
+## [1] 34
+## [1] 35
+## [1] 36
+## [1] 37
+## [1] 38
+## [1] 39
+## [1] 40
+## [1] 41
+## [1] 42
+## [1] 43
+## [1] 44
+## [1] 45
+## [1] 46
+## [1] 47
+## [1] 48
+## [1] 49
+## [1] 50
+```
+
 ### Question 2:
 
 A.  Using a loop, add all the integers between 0 and 1000.
-```{r}
+
+```r
 sum_int=0
 for (i in 1:1000){
   sum_int=sum_int+i
@@ -26,8 +81,13 @@ for (i in 1:1000){
 print(sum_int)
 ```
 
+```
+## [1] 500500
+```
+
 B. Now, add all the EVEN integers between 0 and 1000 (hint: use seq())
-```{r}
+
+```r
 sum_int=0
 even_int=seq(0,1000,2)
 for (i in even_int){
@@ -35,20 +95,37 @@ for (i in even_int){
 }
 print(sum_int)
 ```
+
+```
+## [1] 250500
+```
 C. Now, repeat A and B WITHOUT using a loop.
-```{r}
+
+```r
 vec_int=0:1000
 sum_int_all=sum(vec_int)
 vec_int_even=seq(0,1000,2)
 sum_int_even=sum(vec_int_even)
 print(sum_int_all)
+```
+
+```
+## [1] 500500
+```
+
+```r
 print(sum_int_even)
+```
+
+```
+## [1] 250500
 ```
 ### Question 3:
 
 Here is a dataframe of survey data containing 5 questions :
 
-```{r, eval=FALSE}
+
+```r
 survey <- data.frame(
                      "participant" = c(1, 2, 3, 4, 5, 6),
                      "q1" = c(5, 3, 2, 7, 11, 0),
@@ -61,24 +138,7 @@ survey <- data.frame(
 The response to each question should be an integer between 1 and 5. Obviously, we have some bad values in the dataframe. The goal of this problem is to fix them.
 
 A. Using a loop, create a new dataframe called survey.clean where all the invalid values (those that are not integers between 1 and 5) are set to NA.
-```{r}
-survey.clean=survey
-for (i in 1:nrow(survey.clean)) {
-  for (j in 1:ncol(survey.clean)) {
-    if (survey.clean[i,j]<1 | survey.clean[i,j]>5) {
-      survey.clean[i,j]=NA
-    }
-  }
-}
 
-```
-B. Now, again using a loop, add a new column to the dataframe called “invalid.answers” that indicates, for each participant, how many bad answers they gave.
-```{r}
 
- survey.clean$invalid.answers=0
-  for (i in 1:nrow(survey.clean)) {
-    survey.clean$invalid.answers[i]=length(which(is.na(survey.clean[i,])))
-  }
 
-```
 
