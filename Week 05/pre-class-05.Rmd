@@ -98,18 +98,49 @@ bmi     Body Mass Index
 A. Create a function called standardize.me() that takes a numeric vector as an argument, and returns the standardized version of the vector. 
 ```{r}
 standardize.me=function(x) {
-  (x-mean(x,na.rm=T)/sd(x,na.rm=T))
+  (x-mean(x,na.rm=T))/sd(x,na.rm=T)
 }
 ```
 B. Assign all the numeric columns of the original WCGS dataset to a new dataset called WCGS.new.
+```{r}
+library("dplyr")
+WCGS.new=select_if(wcgs, is.numeric)
+```
 C. Using a loop and your new function, standardize all the variables WCGS.new dataset.
+```{r}
+WCGS.stand=WCGS.new
+  #matrix(0,nrow=nrow(WCGS.new),ncol=ncol(WCGS.new))
+for (i in 1:ncol(WCGS.new)) {
+WCGS.stand[,i]=standardize.me(WCGS.new[,i])
+}
+```
 D. What should the mean and standard deviation of all your new standardized variables be? Test your prediction by running a loop
+# The mean should be zero, and the standard deviation should be 1 
+```{r}
+for (i in seq_along(WCGS.stand)) {
+print(round(c(round(mean(WCGS.stand[,i],na.rm = T),2),sd(WCGS.stand[,i],na.rm = T))),2)
 
+  }
+
+```
 
 
 
 ### Question 2: Looping to Calculate
 
 A. Using a loop, calculate the mean weight of the subjects separated by the type of CHD they have.
-B. Now do the same thing, but now don’t use a loop
+```{r}
+group_mean_weight=data.frame(type=unique(wcgs$typchd69), weight=NA)
 
+for(i in 1:nrow(group_mean_weight)) {
+ group_mean_weight$weight[i] = mean(subset(wcgs, typchd69==group_mean_weight$type[i])$weight)
+}
+group_mean_weight
+```
+
+B. Now do the same thing, but now don’t use a loop
+```{r}
+wcgs %>%
+  group_by(typchd69) %>%
+  summarize(group_weight=mean(weight,na.rm=T))
+```
