@@ -31,6 +31,19 @@ match_length <- function(x, y) {
 ```
 
 2. Compare and contrast rnorm() and MASS::mvrnorm(). How could you make them more consistent?
+# The difference between rnorm and MASS::mvrnorm() is that the former uses sigma-squared (the sd), while the latter (in the univariate case) uses the sigma (the variance). To make them consistent, first you need to set a seed. Then, we'll define a function which gives equivalent results:
+```{r}
+random_equiv=function(n,mean,sd,seed=1) {
+  x=matrix(0,nrow=n,ncol=2)
+  set.seed(seed)
+  x[,1]=rnorm(n,mean=mean,sd=sd)
+  set.seed(seed)
+  x[,2]=MASS::mvrnorm(n,mu=mean,Sigma=sd^2)
+  colnames(x)= c("rnorm","mvrnorm")
+
+  return(x)
+}
+```
 
 
 3. Use `lapply()` and an anonymous function to find the coefficient of variation (the standard deviation divided by the mean) for all columns in the mtcars dataset. 
