@@ -26,15 +26,31 @@ url_base="https://money.cnn.com/data/us_markets/"
 #library(xml2)
 #read_html(url_base)
 library(rvest)
-read_html(url_base)
+us_markets=read_html(url_base)
 ```
 
 2. Get the session details (status, type, size) of the above mentioned URL.
 ```{r}
-typeof(url)
+library(httr)
+x=GET(url_base)
+str(x)
+head(cat(content(x, 'text')))
 ```
+We see the status code is 200 (which is good!), the type if HTML
 
 3. Extract all of the sector names from the “Stock Sectors” table (bottom left of the web page.)
+Using Xpath:
+```{r}
+stock_sectors=html_node(us_markets, xpath='//*[@id="wsod_sectorPerformance"]/table[1]')
+html_table(stock_sectors)[1]
+```
+And using a selector:
+```{r}
+stock_sectors=html_node(us_markets,"#wsod_sectorPerformance > table")
+html_table(stock_sectors)[1]
+
+```
+
 
 4. Extract all of the “3 Month % Change” values from the “Stock Sectors” table.
 5. Extract the table “What’s Moving” (top middle of the web page) into a data-frame.
