@@ -68,13 +68,15 @@ us_markets %>%
 6. Re-construct all of the links from the first column of the “What’s Moving” table.
 Hint: the base URL is “https://money.cnn.com”
 ```{r}
-base_url="https://money.cnn.com"
-page=read_html(base_url)
-page %>%
-  html_node("#wsod_marketMoversContainer > table > tbody > tr:nth-child(2) > td.wsod_firstCol") %>%
+link=us_markets %>%
+  html_node("#wsod_marketMoversContainer > table") %>%
+  html_nodes(".wsod_symbol") %>%
   html_attr("href")
-
-
+  
+  base_url="https://money.cnn.com"
+  
+  links=paste(base_url,link,sep="/")
+  print(links)
 
 ```
 
